@@ -4,7 +4,7 @@ import pandas as pd
 from utils import generate_metric_card
 
 # Load and preprocess data
-df = pd.read_csv("../data/raw/data.csv", low_memory=False)
+df = pd.read_csv("./data/raw/data.csv", low_memory=False)
 df["created_at"] = pd.to_datetime(df["created_at"])
 
 # Enhanced color palette

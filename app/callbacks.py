@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from utils import COLORS
 
 # Load and preprocess data
-df = pd.read_csv("../data/raw/data.csv", low_memory=False)
+df = pd.read_csv("./data/raw/data.csv", low_memory=False)
 df["created_at"] = pd.to_datetime(df["created_at"])
 
 def register_callbacks(app):
