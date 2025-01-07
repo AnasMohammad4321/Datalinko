@@ -111,7 +111,7 @@ def create_filters():
 
 
 def create_metrics():
-    """Create the metrics cards section"""
+    """Create the metrics cards section with hover and click effects"""
     return dbc.Row([
         dbc.Col(
             generate_metric_card(

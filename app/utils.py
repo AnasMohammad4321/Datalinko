@@ -15,16 +15,16 @@ COLORS = {
 def generate_metric_card(id, label, icon):
     return dbc.Card(
         dbc.CardBody([
-            html.Div([  # This is now correct
-                html.I(className=f"fas {icon} fa-2x me-2",
+            html.Div([  # Container for the icon and label
+                html.I(className=f"fas {icon} fa-2x me-2", 
                        style={'color': COLORS['secondary']}),
                 html.H5(label, className="card-title mb-0")
             ], className="d-flex align-items-center mb-3"),
-            html.Div(id=id, className="card-text",
+            html.Div(id=id, className="card-text", 
                      style={"fontSize": "24px", "fontWeight": "bold", "color": COLORS['primary']}),
         ]),
-        className="shadow-sm h-100",
-        style={"backgroundColor": "white"}
+        className="shadow-sm h-100 metric-card",
+        style={"backgroundColor": "white", "transition": "all 0.3s ease-in-out", "borderRadius": "10px", "cursor": "pointer"}
     )
 
 
