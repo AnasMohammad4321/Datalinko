@@ -135,50 +135,64 @@ def create_metrics():
 
 
 def create_chatbot():
-    """Create the enhanced chatbot section"""
+    """Create an enhanced chatbot section with improved UI/UX and consistent height"""
     return dbc.Card(
         [
             dbc.CardHeader(
-                html.H5("Analytics Assistant", className="mb-0"),
+                dbc.Row([
+                    dbc.Col(html.I(className="fas fa-robot me-2",
+                                   style={'color': '#0d6efd'}), width='auto'),
+                    dbc.Col(html.H5("Analytics Assistant", className="mb-0"))
+                ], align="center"),
                 style={
-                    'backgroundColor': '#f8f9fa',
-                    'borderBottom': '1px solid #dee2e6',
-                    'padding': '16px',
-                    'borderRadius': '12px 12px 0 0'
+                    'backgroundColor': '#ffffff',
+                    'borderBottom': '1px solid rgba(0,0,0,0.1)',
+                    'padding': '20px',
+                    'borderRadius': '16px 16px 0 0'
                 }
             ),
             dbc.CardBody(
                 [
-                    # Chat display area
+                    # Chat display area with improved styling
                     html.Div(
                         id="chat-display",
                         children=[
                             html.Div(
-                                html.Div([
-                                    html.I(className="fas fa-robot me-2"),
-                                    "Hello! How can I assist you today?"
-                                ], style={'display': 'flex', 'alignItems': 'center'}),
+                                dbc.Row([
+                                    dbc.Col(
+                                        html.I(className="fas fa-robot",
+                                               style={'color': '#0d6efd', 'fontSize': '1.2rem'}),
+                                        width="auto"
+                                    ),
+                                    dbc.Col(
+                                        "Hello! I'm your analytics assistant. How can I help you analyze your data today?",
+                                        style={'paddingLeft': '10px'}
+                                    )
+                                ], align="center"),
                                 className="chat-message bot-message",
                                 style={
-                                    "padding": "12px 16px",
-                                    "borderRadius": "15px",
-                                    "backgroundColor": COLORS['chatbot']['bot_message'],
-                                    "color": COLORS['chatbot']['bot_text'],
-                                    "maxWidth": "80%",
-                                    "marginBottom": "12px"
+                                    "padding": "16px",
+                                    "borderRadius": "16px",
+                                    "backgroundColor": "rgba(13, 110, 253, 0.1)",
+                                    "color": "#2c3e50",
+                                    "maxWidth": "85%",
+                                    "marginBottom": "16px",
+                                    "boxShadow": "0 2px 4px rgba(0,0,0,0.05)",
+                                    "transition": "all 0.3s ease"
                                 }
                             )
                         ],
                         style={
-                            'height': 'calc(100% - 120px)',
+                            # Adjusted for consistent height
+                            'height': 'calc(100% - 80px)',
                             'overflowY': 'auto',
-                            'backgroundColor': COLORS['chatbot']['background'],
+                            'backgroundColor': '#ffffff',
                             'borderRadius': '12px',
-                            'padding': '16px',
-                            'border': '1px solid #dee2e6'
+                            'padding': '20px',
+                            'scrollBehavior': 'smooth'
                         }
                     ),
-                    # User input and send button
+                    # Enhanced input area
                     html.Div(
                         [
                             dbc.InputGroup(
@@ -186,11 +200,15 @@ def create_chatbot():
                                     dcc.Input(
                                         id="user-input",
                                         type="text",
-                                        placeholder="Ask me anything about your data...",
+                                        placeholder="Ask about your data analysis...",
                                         style={
-                                            'borderRadius': '24px',
-                                            'padding': '12px 20px',
-                                            'flexGrow': 1
+                                            'borderRadius': '25px',
+                                            'padding': '12px 25px',
+                                            'border': '2px solid rgba(0,0,0,0.1)',
+                                            'fontSize': '1rem',
+                                            'transition': 'all 0.3s ease',
+                                            'flexGrow': 1,
+                                            'boxShadow': '0 2px 4px rgba(0,0,0,0.05)'
                                         },
                                         className="form-control"
                                     ),
@@ -198,36 +216,51 @@ def create_chatbot():
                                         html.I(className="fas fa-paper-plane"),
                                         id="send-button",
                                         color="primary",
-                                        style={'borderRadius': '50%',
-                                               'padding': '12px 16px'}
+                                        style={
+                                            'borderRadius': '50%',
+                                            'padding': '12px',
+                                            'width': '45px',
+                                            'height': '45px',
+                                            'marginLeft': '10px',
+                                            'display': 'flex',
+                                            'alignItems': 'center',
+                                            'justifyContent': 'center',
+                                            'boxShadow': '0 2px 4px rgba(0,0,0,0.1)',
+                                            'transition': 'all 0.3s ease'
+                                        }
                                     ),
                                 ],
                                 className="mt-3",
                                 style={'alignItems': 'center'}
                             )
                         ],
-                        style={'marginTop': '16px'}
+                        style={
+                            'marginTop': 'auto',
+                            'padding': '0 10px'
+                        }
                     )
                 ],
-                className="d-flex flex-column justify-content-between",
+                className="d-flex flex-column",
                 style={
-                    'padding': '16px',
-                    'height': '400px',
-                    'borderRadius': '0 0 12px 12px'
+                    'padding': '20px',
+                    'height': '500px',  # Fixed height to match charts
+                    'borderRadius': '0 0 16px 16px'
                 }
             ),
         ],
         className="shadow-sm h-100",
         style={
-            'borderRadius': '12px',
+            'borderRadius': '16px',
             'border': 'none',
+            'backgroundColor': '#ffffff',
+            'transition': 'all 0.3s ease',
             'height': '100%'
         }
     )
 
 
 def create_charts():
-    """Create the enhanced charts section"""
+    """Create enhanced charts section with improved visuals and consistent height"""
     return dbc.Row(
         [
             # Sales Trend Chart
@@ -236,39 +269,97 @@ def create_charts():
                     dbc.Card(
                         [
                             dbc.CardHeader(
-                                html.H5("Sales Trend", className="mb-0"),
+                                dbc.Row([
+                                    dbc.Col(
+                                        html.H5("Sales Trend", className="mb-0")),
+                                    dbc.Col(
+                                        html.Div([
+                                            dbc.Button(
+                                                html.I(
+                                                    className="fas fa-expand-arrows-alt"),
+                                                color="link",
+                                                size="sm",
+                                                className="text-muted",
+                                                style={'boxShadow': 'none'}
+                                            ),
+                                            dbc.Button(
+                                                html.I(
+                                                    className="fas fa-download"),
+                                                color="link",
+                                                size="sm",
+                                                className="text-muted ms-2",
+                                                style={'boxShadow': 'none'}
+                                            )
+                                        ]),
+                                        width="auto",
+                                    )
+                                ], align="center"),
                                 style={
-                                    'backgroundColor': '#f8f9fa',
-                                    'borderBottom': '1px solid #dee2e6',
-                                    'padding': '16px',
-                                    'borderRadius': '12px 12px 0 0'
+                                    'backgroundColor': '#ffffff',
+                                    'borderBottom': '1px solid rgba(0,0,0,0.1)',
+                                    'padding': '20px',
+                                    'borderRadius': '16px 16px 0 0'
                                 }
                             ),
                             dbc.CardBody(
-                                dcc.Loading(
-                                    id="loading-sales-trend",
-                                    children=[
-                                        dcc.Graph(
-                                            id="sales-trend-chart",
-                                            config={
-                                                'displayModeBar': True,
-                                                'scrollZoom': False,
-                                                'displaylogo': False,
-                                                'modeBarButtonsToRemove': [
-                                                    'zoomIn2d', 'zoomOut2d', 'lasso2d', 'toggleSpikelines'
-                                                ]
-                                            },
-                                            style={'height': '350px'}
-                                        )
-                                    ],
-                                    type="circle",
-                                    color="#00aaff"
-                                ),
-                                style={'padding': '16px'}
+                                [
+                                    dcc.Loading(
+                                        id="loading-sales-trend",
+                                        children=[
+                                            dcc.Graph(
+                                                id="sales-trend-chart",
+                                                config={
+                                                    'displayModeBar': 'hover',
+                                                    'scrollZoom': True,
+                                                    'displaylogo': False,
+                                                    'modeBarButtonsToRemove': [
+                                                        'zoomIn2d', 'zoomOut2d', 'lasso2d',
+                                                        'select2d', 'toggleSpikelines'
+                                                    ]
+                                                },
+                                                style={
+                                                    'height': '380px',  # Adjusted for consistent height
+                                                    'borderRadius': '12px'
+                                                }
+                                            )
+                                        ],
+                                        type="circle",
+                                        color="#0d6efd"
+                                    ),
+                                    html.Div(
+                                        dbc.ButtonGroup(
+                                            [
+                                                dbc.Button(
+                                                    "1D", color="light", size="sm"),
+                                                dbc.Button(
+                                                    "1W", color="light", size="sm"),
+                                                dbc.Button(
+                                                    "1M", color="light", size="sm"),
+                                                dbc.Button(
+                                                    "1Y", color="light", size="sm"),
+                                                dbc.Button(
+                                                    "ALL", color="light", size="sm"),
+                                            ],
+                                            size="sm",
+                                            className="mt-3"
+                                        ),
+                                        style={'textAlign': 'center'}
+                                    )
+                                ],
+                                style={
+                                    'padding': '20px',
+                                    'height': '500px'  # Fixed height to match chatbot
+                                }
                             )
                         ],
-                        className="shadow-sm mb-4",
-                        style={'borderRadius': '12px', 'border': 'none'}
+                        className="shadow-sm",
+                        style={
+                            'borderRadius': '16px',
+                            'border': 'none',
+                            'backgroundColor': '#ffffff',
+                            'height': '100%',
+                            'transition': 'all 0.3s ease'
+                        }
                     )
                 ],
                 width=6
@@ -279,12 +370,36 @@ def create_charts():
                     dbc.Card(
                         [
                             dbc.CardHeader(
-                                html.H5("Category Sales", className="mb-0"),
+                                dbc.Row([
+                                    dbc.Col(
+                                        html.H5("Category Sales", className="mb-0")),
+                                    dbc.Col(
+                                        dbc.ButtonGroup(
+                                            [
+                                                dbc.Button(
+                                                    html.I(
+                                                        className="fas fa-chart-pie"),
+                                                    color="light",
+                                                    size="sm",
+                                                    className="active"
+                                                ),
+                                                dbc.Button(
+                                                    html.I(
+                                                        className="fas fa-chart-bar"),
+                                                    color="light",
+                                                    size="sm"
+                                                ),
+                                            ],
+                                            size="sm"
+                                        ),
+                                        width="auto"
+                                    )
+                                ], align="center"),
                                 style={
-                                    'backgroundColor': '#f8f9fa',
-                                    'borderBottom': '1px solid #dee2e6',
-                                    'padding': '16px',
-                                    'borderRadius': '12px 12px 0 0'
+                                    'backgroundColor': '#ffffff',
+                                    'borderBottom': '1px solid rgba(0,0,0,0.1)',
+                                    'padding': '20px',
+                                    'borderRadius': '16px 16px 0 0'
                                 }
                             ),
                             dbc.CardBody(
@@ -294,24 +409,37 @@ def create_charts():
                                         dcc.Graph(
                                             id="category-sales-chart",
                                             config={
-                                                'displayModeBar': True,
+                                                'displayModeBar': 'hover',
                                                 'scrollZoom': False,
                                                 'displaylogo': False,
                                                 'modeBarButtonsToRemove': [
-                                                    'zoomIn2d', 'zoomOut2d', 'lasso2d', 'toggleSpikelines'
+                                                    'zoomIn2d', 'zoomOut2d', 'lasso2d',
+                                                    'select2d', 'toggleSpikelines'
                                                 ]
                                             },
-                                            style={'height': '350px'}
+                                            style={
+                                                'height': '380px',  # Adjusted for consistent height
+                                                'borderRadius': '12px'
+                                            }
                                         )
                                     ],
                                     type="circle",
-                                    color="#00aaff"
+                                    color="#0d6efd"
                                 ),
-                                style={'padding': '16px'}
+                                style={
+                                    'padding': '20px',
+                                    'height': '500px'  # Fixed height to match chatbot
+                                }
                             )
                         ],
-                        className="shadow-sm mb-4",
-                        style={'borderRadius': '12px', 'border': 'none'}
+                        className="shadow-sm",
+                        style={
+                            'borderRadius': '16px',
+                            'border': 'none',
+                            'backgroundColor': '#ffffff',
+                            'height': '100%',
+                            'transition': 'all 0.3s ease'
+                        }
                     )
                 ],
                 width=6
