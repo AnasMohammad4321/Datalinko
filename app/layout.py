@@ -452,60 +452,132 @@ def create_charts():
 def create_custom_chart_controls():
     """Create the custom chart controls section with enhanced UI/UX."""
     return dbc.Card(
-        dbc.CardBody([
-            html.H5("Custom Chart Controls", className="card-title mb-3"),
-            dbc.Row([
-                dbc.Col([
-                    html.Label("X-Axis", className="form-label"),
-                    dcc.Dropdown(
-                        id='x-axis-dropdown',
-                        options=[{'label': col, 'value': col}
-                                 for col in df.columns],
-                        value=NUMERIC_COLUMNS[0] if NUMERIC_COLUMNS else CATEGORICAL_COLUMNS[0],
-                        placeholder="Select a column for X-Axis",
-                        className="mb-3"
-                    ),
-                ], width=6),
-                dbc.Col([
-                    html.Label("Y-Axis", className="form-label"),
-                    dcc.Dropdown(
-                        id='y-axis-dropdown',
-                        options=[{'label': col, 'value': col}
-                                 for col in NUMERIC_COLUMNS],
-                        value=NUMERIC_COLUMNS[1] if len(
-                            NUMERIC_COLUMNS) > 1 else None,
-                        placeholder="Select a column for Y-Axis",
-                        className="mb-3"
-                    ),
-                ], width=6),
-            ], className="mb-4"),
-            html.Label("Chart Type", className="form-label"),
-            dcc.Dropdown(
-                id='chart-type-dropdown',
-                options=[
-                    {'label': 'Line Chart', 'value': 'line'},
-                    {'label': 'Bar Chart', 'value': 'bar'},
-                    {'label': 'Scatter Plot', 'value': 'scatter'},
-                ],
-                value='line',
-                placeholder="Select chart type",
-                className="mb-4"
+        [
+            # Card Header
+            dbc.CardHeader(
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            html.H5("Custom Chart Controls", className="mb-0")
+                        ),
+                        dbc.Col(
+                            dbc.Button(
+                                html.I(className="fas fa-undo"),
+                                color="link",
+                                size="sm",
+                                className="text-muted",
+                                id="reset-controls",
+                                style={'boxShadow': 'none'}
+                            ),
+                            width="auto",
+                        ),
+                    ],
+                    align="center",
+                ),
+                style={
+                    'backgroundColor': '#ffffff',
+                    'borderBottom': '1px solid rgba(0,0,0,0.1)',
+                    'padding': '20px',
+                    'borderRadius': '16px 16px 0 0'
+                },
             ),
-            html.Label("Aggregation", className="form-label"),
-            dcc.Dropdown(
-                id='aggregation-dropdown',
-                options=[
-                    {'label': 'Sum', 'value': 'sum'},
-                    {'label': 'Mean', 'value': 'mean'},
-                    {'label': 'Median', 'value': 'median'},
-                    {'label': 'Count', 'value': 'count'},
+            # Card Body
+            dbc.CardBody(
+                [
+                    dbc.Row(
+                        [
+                            # X-Axis Dropdown
+                            dbc.Col(
+                                [
+                                    html.Label(
+                                        "X-Axis",
+                                        className="form-label fw-bold text-muted",
+                                    ),
+                                    dcc.Dropdown(
+                                        id='x-axis-dropdown',
+                                        options=[
+                                            {'label': col, 'value': col}
+                                            for col in df.columns
+                                        ],
+                                        value=NUMERIC_COLUMNS[0]
+                                        if NUMERIC_COLUMNS
+                                        else CATEGORICAL_COLUMNS[0],
+                                        placeholder="Select a column for X-Axis",
+                                        className="chart-dropdown",
+                                    ),
+                                ],
+                                width=6,
+                            ),
+                            # Y-Axis Dropdown
+                            dbc.Col(
+                                [
+                                    html.Label(
+                                        "Y-Axis",
+                                        className="form-label fw-bold text-muted",
+                                    ),
+                                    dcc.Dropdown(
+                                        id='y-axis-dropdown',
+                                        options=[
+                                            {'label': col, 'value': col}
+                                            for col in NUMERIC_COLUMNS
+                                        ],
+                                        value=NUMERIC_COLUMNS[1]
+                                        if len(NUMERIC_COLUMNS) > 1
+                                        else None,
+                                        placeholder="Select a column for Y-Axis",
+                                        className="chart-dropdown",
+                                    ),
+                                ],
+                                width=6,
+                            ),
+                        ],
+                        className="mb-4",
+                    ),
+                    # Chart Type Dropdown
+                    html.Label(
+                        "Chart Type", className="form-label fw-bold text-muted"
+                    ),
+                    dcc.Dropdown(
+                        id='chart-type-dropdown',
+                        options=[
+                            {'label': 'Line Chart', 'value': 'line'},
+                            {'label': 'Bar Chart', 'value': 'bar'},
+                            {'label': 'Scatter Plot', 'value': 'scatter'},
+                        ],
+                        value='line',
+                        placeholder="Select chart type",
+                        className="chart-dropdown mb-4",
+                    ),
+                    # Aggregation Dropdown
+                    html.Label(
+                        "Aggregation", className="form-label fw-bold text-muted"
+                    ),
+                    dcc.Dropdown(
+                        id='aggregation-dropdown',
+                        options=[
+                            {'label': 'Sum', 'value': 'sum'},
+                            {'label': 'Mean', 'value': 'mean'},
+                            {'label': 'Median', 'value': 'median'},
+                            {'label': 'Count', 'value': 'count'},
+                        ],
+                        value='sum',
+                        placeholder="Select aggregation method",
+                        className="chart-dropdown mb-4",
+                    ),
                 ],
-                value='sum',
-                placeholder="Select aggregation method",
-                className="mb-4"
+                style={
+                    'padding': '20px',
+                    'height': '500px',  # Match height with other components
+                },
             ),
-        ]),
-        className="shadow-sm mb-4"
+        ],
+        className="shadow-sm h-100",
+        style={
+            'borderRadius': '16px',
+            'border': 'none',
+            'backgroundColor': '#ffffff',
+            'transition': 'all 0.3s ease',
+        },
     )
 
 
@@ -531,27 +603,70 @@ layout = dbc.Container([
         className="mb-4 align-items-stretch"
     ),
     dbc.Row([
-        dbc.Col(create_custom_chart_controls(), width=4),
+        dbc.Col(create_custom_chart_controls(), width=4, className="h-100"),
         dbc.Col(
-            dbc.Card(
+            dbc.Card([
+                dbc.CardHeader(
+                    dbc.Row([
+                        dbc.Col(
+                            html.H5("Custom Visualization", className="mb-0")),
+                        dbc.Col(
+                            html.Div([
+                                dbc.Button(
+                                    html.I(
+                                        className="fas fa-expand-arrows-alt"),
+                                    color="link",
+                                    size="sm",
+                                    className="text-muted me-2",
+                                    style={'boxShadow': 'none'}
+                                ),
+                                dbc.Button(
+                                    html.I(className="fas fa-download"),
+                                    color="link",
+                                    size="sm",
+                                    className="text-muted",
+                                    style={'boxShadow': 'none'}
+                                )
+                            ]),
+                            width="auto",
+                        )
+                    ], align="center"),
+                    style={
+                        'backgroundColor': '#ffffff',
+                        'borderBottom': '1px solid rgba(0,0,0,0.1)',
+                        'padding': '20px',
+                        'borderRadius': '16px 16px 0 0'
+                    }
+                ),
                 dbc.CardBody([
                     dcc.Loading(
                         id="loading-graph",
                         children=[
                             dcc.Graph(
                                 id='custom-graph',
-                                style={'height': '600px',
-                                       'borderRadius': '10px'}
+                                style={
+                                    'height': '460px',  # Adjusted to match others
+                                    'borderRadius': '12px'
+                                }
                             )
                         ],
-                        type="circle",  # Choose between "circle" or "default"
-                        color="#00aaff"  # Loading spinner color
+                        type="circle",
+                        color="#0d6efd"  # Matched with other loaders
                     )
-                ]),
-                className="shadow-sm"
-            ),
-            width=8
+                ], style={
+                    'padding': '20px',
+                    'height': '500px'  # Match height with other components
+                }),
+            ],
+                className="shadow-sm h-100",
+                style={
+                'borderRadius': '16px',
+                'border': 'none',
+                'backgroundColor': '#ffffff',
+                'transition': 'all 0.3s ease'
+            }),
+            width=8,
+            className="h-100"
         )
-    ])
-
+    ], className="align-items-stretch")
 ], fluid=True, style={"backgroundColor": COLORS['background'], "padding": "24px"})
