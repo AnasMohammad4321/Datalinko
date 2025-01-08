@@ -135,88 +135,190 @@ def create_metrics():
 
 
 def create_chatbot():
-    """Create the chatbot section"""
-    return dbc.Card([
-        dbc.CardHeader(
-            html.H5("Analytics Assistant", className="mb-0"),
-            style={'backgroundColor': 'white'}
-        ),
-        dbc.CardBody([
-            html.Div(
-                id="chat-display",
-                children=[
-                    html.Div(
-                        html.Div([
-                            html.I(className="fas fa-robot me-2"),
-                            "Hello! How can I assist you today?"
-                        ], style={'display': 'flex', 'alignItems': 'center'}),
-                        className="chat-message bot-message",
-                        style={
-                            "padding": "12px 16px",
-                            "borderRadius": "15px",
-                            "backgroundColor": COLORS['chatbot']['bot_message'],
-                            "color": COLORS['chatbot']['bot_text'],
-                            "maxWidth": "80%",
-                            "marginBottom": "12px"
-                        }
-                    )
-                ],
+    """Create the enhanced chatbot section"""
+    return dbc.Card(
+        [
+            dbc.CardHeader(
+                html.H5("Analytics Assistant", className="mb-0"),
                 style={
-                    'height': 'calc(100% - 80px)',
-                    'overflowY': 'auto',
-                    'backgroundColor': COLORS['chatbot']['background'],
-                    'borderRadius': '12px',
-                    'padding': '16px'
+                    'backgroundColor': '#f8f9fa',
+                    'borderBottom': '1px solid #dee2e6',
+                    'padding': '16px',
+                    'borderRadius': '12px 12px 0 0'
                 }
             ),
-            html.Div([
-                dcc.Input(
-                    id="user-input",
-                    type="text",
-                    placeholder="Ask me anything about your data...",
-                    className="form-control mb-2",
-                    style={'borderRadius': '24px', 'padding': '12px 20px'}
-                ),
-                dbc.Button(
-                    [html.I(className="fas fa-paper-plane me-2"), "Send"],
-                    id="send-button",
-                    color="primary",
-                    className="w-100",
-                    style={'borderRadius': '24px'}
-                )
-            ], style={'marginTop': '16px'})
-        ])
-    ], className="shadow-sm h-100", style={'borderRadius': '12px', 'border': 'none'})
+            dbc.CardBody(
+                [
+                    # Chat display area
+                    html.Div(
+                        id="chat-display",
+                        children=[
+                            html.Div(
+                                html.Div([
+                                    html.I(className="fas fa-robot me-2"),
+                                    "Hello! How can I assist you today?"
+                                ], style={'display': 'flex', 'alignItems': 'center'}),
+                                className="chat-message bot-message",
+                                style={
+                                    "padding": "12px 16px",
+                                    "borderRadius": "15px",
+                                    "backgroundColor": COLORS['chatbot']['bot_message'],
+                                    "color": COLORS['chatbot']['bot_text'],
+                                    "maxWidth": "80%",
+                                    "marginBottom": "12px"
+                                }
+                            )
+                        ],
+                        style={
+                            'height': 'calc(100% - 120px)',
+                            'overflowY': 'auto',
+                            'backgroundColor': COLORS['chatbot']['background'],
+                            'borderRadius': '12px',
+                            'padding': '16px',
+                            'border': '1px solid #dee2e6'
+                        }
+                    ),
+                    # User input and send button
+                    html.Div(
+                        [
+                            dbc.InputGroup(
+                                [
+                                    dcc.Input(
+                                        id="user-input",
+                                        type="text",
+                                        placeholder="Ask me anything about your data...",
+                                        style={
+                                            'borderRadius': '24px',
+                                            'padding': '12px 20px',
+                                            'flexGrow': 1
+                                        },
+                                        className="form-control"
+                                    ),
+                                    dbc.Button(
+                                        html.I(className="fas fa-paper-plane"),
+                                        id="send-button",
+                                        color="primary",
+                                        style={'borderRadius': '50%',
+                                               'padding': '12px 16px'}
+                                    ),
+                                ],
+                                className="mt-3",
+                                style={'alignItems': 'center'}
+                            )
+                        ],
+                        style={'marginTop': '16px'}
+                    )
+                ],
+                className="d-flex flex-column justify-content-between",
+                style={
+                    'padding': '16px',
+                    'height': '400px',
+                    'borderRadius': '0 0 12px 12px'
+                }
+            ),
+        ],
+        className="shadow-sm h-100",
+        style={
+            'borderRadius': '12px',
+            'border': 'none',
+            'height': '100%'
+        }
+    )
 
 
 def create_charts():
-    """Create the charts section"""
-    return dbc.Row([
-        dbc.Col([
-            dbc.Card([
-                dbc.CardHeader(
-                    html.H5("Sales Trend", className="mb-0"),
-                    style={'backgroundColor': 'white'}
-                ),
-                dbc.CardBody(
-                    dcc.Graph(id="sales-trend-chart",
-                              config={'displayModeBar': False})
-                )
-            ], className="shadow-sm mb-4", style={'borderRadius': '12px', 'border': 'none'})
-        ], width=6),
-        dbc.Col([
-            dbc.Card([
-                dbc.CardHeader(
-                    html.H5("Category Sales", className="mb-0"),
-                    style={'backgroundColor': 'white'}
-                ),
-                dbc.CardBody(
-                    dcc.Graph(id="category-sales-chart",
-                              config={'displayModeBar': False})
-                )
-            ], className="shadow-sm mb-4", style={'borderRadius': '12px', 'border': 'none'})
-        ], width=6)
-    ])
+    """Create the enhanced charts section"""
+    return dbc.Row(
+        [
+            # Sales Trend Chart
+            dbc.Col(
+                [
+                    dbc.Card(
+                        [
+                            dbc.CardHeader(
+                                html.H5("Sales Trend", className="mb-0"),
+                                style={
+                                    'backgroundColor': '#f8f9fa',
+                                    'borderBottom': '1px solid #dee2e6',
+                                    'padding': '16px',
+                                    'borderRadius': '12px 12px 0 0'
+                                }
+                            ),
+                            dbc.CardBody(
+                                dcc.Loading(
+                                    id="loading-sales-trend",
+                                    children=[
+                                        dcc.Graph(
+                                            id="sales-trend-chart",
+                                            config={
+                                                'displayModeBar': True,
+                                                'scrollZoom': False,
+                                                'displaylogo': False,
+                                                'modeBarButtonsToRemove': [
+                                                    'zoomIn2d', 'zoomOut2d', 'lasso2d', 'toggleSpikelines'
+                                                ]
+                                            },
+                                            style={'height': '350px'}
+                                        )
+                                    ],
+                                    type="circle",
+                                    color="#00aaff"
+                                ),
+                                style={'padding': '16px'}
+                            )
+                        ],
+                        className="shadow-sm mb-4",
+                        style={'borderRadius': '12px', 'border': 'none'}
+                    )
+                ],
+                width=6
+            ),
+            # Category Sales Chart
+            dbc.Col(
+                [
+                    dbc.Card(
+                        [
+                            dbc.CardHeader(
+                                html.H5("Category Sales", className="mb-0"),
+                                style={
+                                    'backgroundColor': '#f8f9fa',
+                                    'borderBottom': '1px solid #dee2e6',
+                                    'padding': '16px',
+                                    'borderRadius': '12px 12px 0 0'
+                                }
+                            ),
+                            dbc.CardBody(
+                                dcc.Loading(
+                                    id="loading-category-sales",
+                                    children=[
+                                        dcc.Graph(
+                                            id="category-sales-chart",
+                                            config={
+                                                'displayModeBar': True,
+                                                'scrollZoom': False,
+                                                'displaylogo': False,
+                                                'modeBarButtonsToRemove': [
+                                                    'zoomIn2d', 'zoomOut2d', 'lasso2d', 'toggleSpikelines'
+                                                ]
+                                            },
+                                            style={'height': '350px'}
+                                        )
+                                    ],
+                                    type="circle",
+                                    color="#00aaff"
+                                ),
+                                style={'padding': '16px'}
+                            )
+                        ],
+                        className="shadow-sm mb-4",
+                        style={'borderRadius': '12px', 'border': 'none'}
+                    )
+                ],
+                width=6
+            )
+        ],
+        className="g-4 align-items-stretch"
+    )
 
 
 def create_custom_chart_controls():
@@ -285,10 +387,21 @@ layout = dbc.Container([
     create_action_bar(),
     create_filters(),
     create_metrics(),
-    dbc.Row([
-        dbc.Col(create_chatbot(), width=4),
-        dbc.Col(create_charts(), width=8)
-    ], className="mb-4"),
+    dbc.Row(
+        [
+            dbc.Col(
+                create_chatbot(),
+                width=4,
+                className="h-100"
+            ),
+            dbc.Col(
+                create_charts(),
+                width=8,
+                className="h-100"
+            )
+        ],
+        className="mb-4 align-items-stretch"
+    ),
     dbc.Row([
         dbc.Col(create_custom_chart_controls(), width=4),
         dbc.Col(
