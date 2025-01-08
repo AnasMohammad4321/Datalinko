@@ -1,0 +1,39 @@
+.filter-card:hover {
+    transform: scale(1.02); /* Slightly enlarge the card on hover */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Add a soft shadow */
+}
+
+.dcc-DatePickerRange input, .dcc-Select {
+    border: 1px solid #ccc; /* Light border for inputs */
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+.dcc-DatePickerRange input:focus, .dcc-Select:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus glow effect */
+}
+
+.dcc-Select .Select-control {
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+.metric-card:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add soft shadow on hover */
+}
+
+.metric-card:active {
+    transform: scale(0.98); /* Slightly shrink on click */
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2); /* Stronger shadow when clicked */
+}
+
+.card-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3a3a3a; /* Primary color, adjust to fit your theme */
+    padding-top: 5px; /* Add spacing between the label and value */
+}

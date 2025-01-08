@@ -80,7 +80,7 @@ def create_action_bar():
 
 
 def create_filters():
-    """Create the filters section"""
+    """Create the filters section with improved UI/UX"""
     return dbc.Card([
         dbc.CardBody([
             dbc.Row([
@@ -90,7 +90,8 @@ def create_filters():
                         id="date-range",
                         start_date=df["created_at"].min(),
                         end_date=df["created_at"].max(),
-                        style={"width": "100%"}
+                        style={"width": "100%", "padding": "0.5rem",
+                               "borderRadius": "8px"}
                     )
                 ], xs=12, md=6),
                 dbc.Col([
@@ -102,12 +103,14 @@ def create_filters():
                             for status in df["order_status"].unique()
                         ],
                         value=df["order_status"].unique(),
-                        multi=True
+                        multi=True,
+                        style={"width": "100%", "padding": "0.5rem",
+                               "borderRadius": "8px"}
                     )
                 ], xs=12, md=6)
             ])
         ])
-    ], className="mb-4 shadow-sm", style={'borderRadius': '12px', 'border': 'none'})
+    ], className="mb-4 shadow-sm filter-card", style={'borderRadius': '12px', 'border': 'none', 'backgroundColor': 'white'})
 
 
 def create_metrics():
@@ -217,23 +220,36 @@ def create_charts():
 
 
 def create_custom_chart_controls():
-    """Create the custom chart controls section"""
-    return html.Div([
-        html.Div([
-            html.Label("X-Axis"),
-            dcc.Dropdown(
-                id='x-axis-dropdown',
-                options=[{'label': col, 'value': col} for col in df.columns],
-                value=NUMERIC_COLUMNS[0] if NUMERIC_COLUMNS else CATEGORICAL_COLUMNS[0],
-            ),
-            html.Label("Y-Axis"),
-            dcc.Dropdown(
-                id='y-axis-dropdown',
-                options=[{'label': col, 'value': col}
-                         for col in NUMERIC_COLUMNS],
-                value=NUMERIC_COLUMNS[1] if len(NUMERIC_COLUMNS) > 1 else None,
-            ),
-            html.Label("Chart Type"),
+    """Create the custom chart controls section with enhanced UI/UX."""
+    return dbc.Card(
+        dbc.CardBody([
+            html.H5("Custom Chart Controls", className="card-title mb-3"),
+            dbc.Row([
+                dbc.Col([
+                    html.Label("X-Axis", className="form-label"),
+                    dcc.Dropdown(
+                        id='x-axis-dropdown',
+                        options=[{'label': col, 'value': col}
+                                 for col in df.columns],
+                        value=NUMERIC_COLUMNS[0] if NUMERIC_COLUMNS else CATEGORICAL_COLUMNS[0],
+                        placeholder="Select a column for X-Axis",
+                        className="mb-3"
+                    ),
+                ], width=6),
+                dbc.Col([
+                    html.Label("Y-Axis", className="form-label"),
+                    dcc.Dropdown(
+                        id='y-axis-dropdown',
+                        options=[{'label': col, 'value': col}
+                                 for col in NUMERIC_COLUMNS],
+                        value=NUMERIC_COLUMNS[1] if len(
+                            NUMERIC_COLUMNS) > 1 else None,
+                        placeholder="Select a column for Y-Axis",
+                        className="mb-3"
+                    ),
+                ], width=6),
+            ], className="mb-4"),
+            html.Label("Chart Type", className="form-label"),
             dcc.Dropdown(
                 id='chart-type-dropdown',
                 options=[
@@ -241,9 +257,11 @@ def create_custom_chart_controls():
                     {'label': 'Bar Chart', 'value': 'bar'},
                     {'label': 'Scatter Plot', 'value': 'scatter'},
                 ],
-                value='line'
+                value='line',
+                placeholder="Select chart type",
+                className="mb-4"
             ),
-            html.Label("Aggregation"),
+            html.Label("Aggregation", className="form-label"),
             dcc.Dropdown(
                 id='aggregation-dropdown',
                 options=[
@@ -252,10 +270,13 @@ def create_custom_chart_controls():
                     {'label': 'Median', 'value': 'median'},
                     {'label': 'Count', 'value': 'count'},
                 ],
-                value='sum'
+                value='sum',
+                placeholder="Select aggregation method",
+                className="mb-4"
             ),
-        ], className="mb-4")
-    ])
+        ]),
+        className="shadow-sm mb-4"
+    )
 
 
 # Main layout
@@ -271,13 +292,25 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col(create_custom_chart_controls(), width=4),
         dbc.Col(
-            dcc.Loading(
-                id="loading-graph",
-                children=[dcc.Graph(id='custom-graph',
-                                    style={'height': '600px'})]
+            dbc.Card(
+                dbc.CardBody([
+                    dcc.Loading(
+                        id="loading-graph",
+                        children=[
+                            dcc.Graph(
+                                id='custom-graph',
+                                style={'height': '600px',
+                                       'borderRadius': '10px'}
+                            )
+                        ],
+                        type="circle",  # Choose between "circle" or "default"
+                        color="#00aaff"  # Loading spinner color
+                    )
+                ]),
+                className="shadow-sm"
             ),
             width=8
         )
     ])
-], fluid=True, style={"backgroundColor": COLORS['background'], "padding": "24px"})
 
+], fluid=True, style={"backgroundColor": COLORS['background'], "padding": "24px"})
