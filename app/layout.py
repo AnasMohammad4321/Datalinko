@@ -92,7 +92,8 @@ def create_filters():
                         start_date=df["created_at"].min(),
                         end_date=df["created_at"].max(),
                         style={"width": "100%", "padding": "0.5rem",
-                               "borderRadius": "8px"}
+                               'zIndex': 2,
+                               "borderRadius": "8px", }
                     )
                 ], xs=12, md=6),
                 dbc.Col([
@@ -162,7 +163,7 @@ def create_chatbot():
                     # Semi-transparent black
                     'backgroundColor': 'rgba(0, 0, 0, 0.10)',
                     'backdropFilter': 'blur(1px)',  # Blurred background
-                    'zIndex': 10,  # Above other elements
+                    'zIndex': 1,  # Above other elements
                     'display': 'flex',
                     'alignItems': 'center',
                     'justifyContent': 'center',
@@ -692,95 +693,186 @@ def create_action_bar():
     )
 
 
-layout = html.Div(
-    dbc.Container([
-        create_header(),
-        create_action_bar(),
-        create_filters(),
-        create_metrics(),
-        dbc.Row(
-            [
-                dbc.Col(
-                    create_chatbot(),
-                    width=4,
-                    className="h-100"
-                ),
-                dbc.Col(
-                    create_charts(),
-                    width=8,
-                    className="h-100"
-                )
-            ],
-            className="mb-4 align-items-stretch"
-        ),
-        dbc.Row([
-            dbc.Col(create_custom_chart_controls(),
-                    width=4, className="h-100"),
+# layout = html.Div(
+#     dbc.Container([
+#         create_header(),
+#         create_action_bar(),
+#         create_filters(),
+#         create_metrics(),
+#         dbc.Row(
+#             [
+#                 dbc.Col(
+#                     create_chatbot(),
+#                     width=4,
+#                     className="h-100"
+#                 ),
+#                 dbc.Col(
+#                     create_charts(),
+#                     width=8,
+#                     className="h-100"
+#                 )
+#             ],
+#             className="mb-4 align-items-stretch"
+#         ),
+#         dbc.Row([
+#             dbc.Col(create_custom_chart_controls(),
+#                     width=4, className="h-100"),
+#             dbc.Col(
+#                 dbc.Card([
+#                     dbc.CardHeader(
+#                         dbc.Row([
+#                             dbc.Col(
+#                                 html.H5("Custom Visualization", className="mb-0")),
+#                             dbc.Col(
+#                                 html.Div([
+#                                     dbc.Button(
+#                                         html.I(
+#                                             className="fas fa-expand-arrows-alt"),
+#                                         color="link",
+#                                         size="sm",
+#                                         className="text-muted me-2",
+#                                         style={'boxShadow': 'none'}
+#                                     ),
+#                                     dbc.Button(
+#                                         html.I(className="fas fa-download"),
+#                                         color="link",
+#                                         size="sm",
+#                                         className="text-muted",
+#                                         style={'boxShadow': 'none'}
+#                                     )
+#                                 ]),
+#                                 width="auto",
+#                             )
+#                         ], align="center"),
+#                         style={
+#                             'backgroundColor': '#ffffff',
+#                             'borderBottom': '1px solid rgba(0,0,0,0.1)',
+#                             'padding': '20px',
+#                             'borderRadius': '16px 16px 0 0'
+#                         }
+#                     ),
+#                     dbc.CardBody([
+#                         dcc.Loading(
+#                             id="loading-graph",
+#                             children=[
+#                                 dcc.Graph(
+#                                     id='custom-graph',
+#                                     style={
+#                                         'height': '460px',  # Adjusted to match others
+#                                         'borderRadius': '12px'
+#                                     }
+#                                 )
+#                             ],
+#                             type="circle",
+#                             color="#0d6efd"  # Matched with other loaders
+#                         )
+#                     ], style={
+#                         'padding': '20px',
+#                         'height': '500px'  # Match height with other components
+#                     }),
+#                 ],
+#                     className="shadow-sm h-100",
+#                     style={
+#                     'borderRadius': '16px',
+#                     'border': 'none',
+#                     'backgroundColor': '#ffffff',
+#                     'transition': 'all 0.3s ease'
+#                 }),
+#                 width=8,
+#                 className="h-100"
+#             )
+#         ], className="align-items-stretch")
+#     ], fluid=True),
+#     id="main-container"
+# )
+
+
+# Main layout
+layout = dbc.Container([
+    create_header(),
+    create_action_bar(),
+    create_filters(),
+    create_metrics(),
+    dbc.Row(
+        [
             dbc.Col(
-                dbc.Card([
-                    dbc.CardHeader(
-                        dbc.Row([
-                            dbc.Col(
-                                html.H5("Custom Visualization", className="mb-0")),
-                            dbc.Col(
-                                html.Div([
-                                    dbc.Button(
-                                        html.I(
-                                            className="fas fa-expand-arrows-alt"),
-                                        color="link",
-                                        size="sm",
-                                        className="text-muted me-2",
-                                        style={'boxShadow': 'none'}
-                                    ),
-                                    dbc.Button(
-                                        html.I(className="fas fa-download"),
-                                        color="link",
-                                        size="sm",
-                                        className="text-muted",
-                                        style={'boxShadow': 'none'}
-                                    )
-                                ]),
-                                width="auto",
-                            )
-                        ], align="center"),
-                        style={
-                            'backgroundColor': '#ffffff',
-                            'borderBottom': '1px solid rgba(0,0,0,0.1)',
-                            'padding': '20px',
-                            'borderRadius': '16px 16px 0 0'
-                        }
-                    ),
-                    dbc.CardBody([
-                        dcc.Loading(
-                            id="loading-graph",
-                            children=[
-                                dcc.Graph(
-                                    id='custom-graph',
-                                    style={
-                                        'height': '460px',  # Adjusted to match others
-                                        'borderRadius': '12px'
-                                    }
-                                )
-                            ],
-                            type="circle",
-                            color="#0d6efd"  # Matched with other loaders
-                        )
-                    ], style={
-                        'padding': '20px',
-                        'height': '500px'  # Match height with other components
-                    }),
-                ],
-                    className="shadow-sm h-100",
-                    style={
-                    'borderRadius': '16px',
-                    'border': 'none',
-                    'backgroundColor': '#ffffff',
-                    'transition': 'all 0.3s ease'
-                }),
+                create_chatbot(),
+                width=4,
+                className="h-100"
+            ),
+            dbc.Col(
+                create_charts(),
                 width=8,
                 className="h-100"
             )
-        ], className="align-items-stretch")
-    ], fluid=True),
-    id="main-container"
-)
+        ],
+        className="mb-4 align-items-stretch"
+    ),
+    dbc.Row([
+        dbc.Col(create_custom_chart_controls(), width=4, className="h-100"),
+        dbc.Col(
+            dbc.Card([
+                dbc.CardHeader(
+                    dbc.Row([
+                        dbc.Col(
+                            html.H5("Custom Visualization", className="mb-0")),
+                        dbc.Col(
+                            html.Div([
+                                dbc.Button(
+                                    html.I(
+                                        className="fas fa-expand-arrows-alt"),
+                                    color="link",
+                                    size="sm",
+                                    className="text-muted me-2",
+                                    style={'boxShadow': 'none'}
+                                ),
+                                dbc.Button(
+                                    html.I(className="fas fa-download"),
+                                    color="link",
+                                    size="sm",
+                                    className="text-muted",
+                                    style={'boxShadow': 'none'}
+                                )
+                            ]),
+                            width="auto",
+                        )
+                    ], align="center"),
+                    style={
+                        'backgroundColor': '#ffffff',
+                        'borderBottom': '1px solid rgba(0,0,0,0.1)',
+                        'padding': '20px',
+                        'borderRadius': '16px 16px 0 0'
+                    }
+                ),
+                dbc.CardBody([
+                    dcc.Loading(
+                        id="loading-graph",
+                        children=[
+                            dcc.Graph(
+                                id='custom-graph',
+                                style={
+                                    'height': '460px',  # Adjusted to match others
+                                    'borderRadius': '12px'
+                                }
+                            )
+                        ],
+                        type="circle",
+                        color="#0d6efd"  # Matched with other loaders
+                    )
+                ], style={
+                    'padding': '20px',
+                    'height': '500px'  # Match height with other components
+                }),
+            ],
+                className="shadow-sm h-100",
+                style={
+                'borderRadius': '16px',
+                'border': 'none',
+                'backgroundColor': '#ffffff',
+                'transition': 'all 0.3s ease'
+            }),
+            width=8,
+            className="h-100"
+        )
+    ], className="align-items-stretch")
+], fluid=True, style={"backgroundColor": COLORS['background'], "padding": "24px"})
