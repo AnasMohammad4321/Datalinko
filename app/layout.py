@@ -135,9 +135,40 @@ def create_metrics():
 
 
 def create_chatbot():
-    """Create an enhanced chatbot section with improved UI/UX and consistent height"""
+    """Create an enhanced chatbot section with improved UI/UX and an under-construction overlay"""
     return dbc.Card(
         [
+            # Under-construction overlay
+            html.Div(
+                [
+                    html.Div(
+                        "Under Construction",
+                        style={
+                            'color': 'white',
+                            'fontSize': '2rem',
+                            # 'fontWeight': 'bold',
+                            'textAlign': 'center',
+                            'textShadow': '0 2px 4px rgba(0, 0, 0, 0.5)',
+                        },
+                    )
+                ],
+                style={
+                    'position': 'absolute',
+                    'top': 0,
+                    'left': 0,
+                    'width': '100%',
+                    'height': '100%',
+                    # Semi-transparent black
+                    'backgroundColor': 'rgba(0, 0, 0, 0.6)',
+                    'backdropFilter': 'blur(1px)',  # Blurred background
+                    'zIndex': 10,  # Above other elements
+                    'display': 'flex',
+                    'alignItems': 'center',
+                    'justifyContent': 'center',
+                    'borderRadius': '16px',  # Match the card's radius
+                },
+                id="under-construction-overlay",
+            ),
             dbc.CardHeader(
                 dbc.Row([
                     dbc.Col(html.I(className="fas fa-robot me-2",
@@ -153,7 +184,7 @@ def create_chatbot():
             ),
             dbc.CardBody(
                 [
-                    # Chat display area with improved styling
+                    # Chat display area
                     html.Div(
                         id="chat-display",
                         children=[
@@ -183,7 +214,6 @@ def create_chatbot():
                             )
                         ],
                         style={
-                            # Adjusted for consistent height
                             'height': 'calc(100% - 80px)',
                             'overflowY': 'auto',
                             'backgroundColor': '#ffffff',
@@ -192,7 +222,7 @@ def create_chatbot():
                             'scrollBehavior': 'smooth'
                         }
                     ),
-                    # Enhanced input area
+                    # Input area
                     html.Div(
                         [
                             dbc.InputGroup(
@@ -243,12 +273,13 @@ def create_chatbot():
                 className="d-flex flex-column",
                 style={
                     'padding': '20px',
-                    'height': '500px',  # Fixed height to match charts
+                    'height': '500px',
                     'borderRadius': '0 0 16px 16px'
                 }
             ),
         ],
-        className="shadow-sm h-100",
+        # Make sure the card is position-relative
+        className="shadow-sm h-100 position-relative",
         style={
             'borderRadius': '16px',
             'border': 'none',
