@@ -29,8 +29,56 @@ AGGREGATIONS = {
     'max': 'max',
 }
 
+LIGHT_THEME = {
+    "background": "#f8f9fa",
+    "text": "#212529",
+    "card": "#ffffff",
+    "border": "1px solid rgba(0,0,0,0.1)",
+    "button": "#0d6efd",
+}
+
+DARK_THEME = {
+    "background": "#212529",
+    "text": "#f8f9fa",
+    "card": "#343a40",
+    "border": "1px solid rgba(255,255,255,0.1)",
+    "button": "#0d6efd",
+}
+
 
 def register_callbacks(app):
+
+    @app.callback(
+        Output("main-container", "style"),
+        Output("custom-graph", "style"),
+        Output("chat-display", "style"),
+        [Input("dark-mode-toggle", "value")]
+    )
+    def toggle_dark_mode(dark_mode):
+        theme = DARK_THEME if dark_mode else LIGHT_THEME
+
+        container_style = {
+            "backgroundColor": theme["background"],
+            "color": theme["text"],
+            "padding": "24px",
+            "height": "100vh",  # Adjust to fit the full screen
+        }
+
+        card_style = {
+            "backgroundColor": theme["card"],
+            "color": theme["text"],
+            "border": theme["border"],
+            "borderRadius": "16px",
+        }
+
+        graph_style = {
+            "height": "460px",
+            "borderRadius": "12px",
+            "backgroundColor": theme["card"],
+        }
+
+        return container_style, graph_style, card_style
+
     @app.callback(
         [
             Output("sales-trend-chart", "figure"),
