@@ -1,33 +1,11 @@
-from dash.dependencies import Input, Output
+from dash.dependencies import Input
 from dash import dcc, html
 import dash_bootstrap_components as dbc
-import pandas as pd
-import plotly.express as px
 from utils import generate_metric_card
+from constants.generic_constants import COLORS, load_data
 
-# Load and preprocess data
-df = pd.read_csv("./data/raw/sample_data.csv", low_memory=False)
-df["created_at"] = pd.to_datetime(df["created_at"])
+df = load_data()
 
-# Enhanced color palette
-COLORS = {
-    'primary': '#2C3E50',
-    'secondary': '#18BC9C',
-    'background': '#F8F9FA',
-    'text': '#2C3E50',
-    'chatbot': {
-        'background': '#F8F9FA',
-        'user_message': '#18BC9C',
-        'bot_message': '#EBF5FB',
-        'user_text': '#FFFFFF',
-        'bot_text': '#2C3E50',
-    },
-    'border': '#E9ECEF',
-    'hover': '#F1F2F6',
-    'chart_colors': ['#18BC9C', '#3498DB', '#E74C3C', '#F39C12', '#9B59B6']
-}
-
-# Data column classifications
 NUMERIC_COLUMNS = df.select_dtypes(include=['number']).columns.tolist()
 CATEGORICAL_COLUMNS = df.select_dtypes(
     include=['object', 'category']).columns.tolist()
@@ -140,11 +118,9 @@ def create_chatbot():
     """Create an enhanced chatbot section with improved UI/UX and an under-construction overlay"""
     return dbc.Card(
         [
-            # Under-construction overlay
             html.Div(
                 [
                     html.Div(
-                        # "Under Construction",
                         style={
                             'color': 'white',
                             'fontSize': '2rem',
@@ -160,14 +136,13 @@ def create_chatbot():
                     'left': 0,
                     'width': '100%',
                     'height': '100%',
-                    # Semi-transparent black
                     'backgroundColor': 'rgba(0, 0, 0, 0.10)',
-                    'backdropFilter': 'blur(1px)',  # Blurred background
-                    'zIndex': 1,  # Above other elements
+                    'backdropFilter': 'blur(1px)',
+                    'zIndex': 1,
                     'display': 'flex',
                     'alignItems': 'center',
                     'justifyContent': 'center',
-                    'borderRadius': '16px',  # Match the card's radius
+                    'borderRadius': '16px',
                 },
                 id="under-construction-overlay",
             ),
@@ -186,7 +161,6 @@ def create_chatbot():
             ),
             dbc.CardBody(
                 [
-                    # Chat display area
                     html.Div(
                         id="chat-display",
                         children=[
@@ -224,7 +198,6 @@ def create_chatbot():
                             'scrollBehavior': 'smooth'
                         }
                     ),
-                    # Input area
                     html.Div(
                         [
                             dbc.InputGroup(
@@ -280,7 +253,6 @@ def create_chatbot():
                 }
             ),
         ],
-        # Make sure the card is position-relative
         className="shadow-sm h-100 position-relative",
         style={
             'borderRadius': '16px',
@@ -296,7 +268,6 @@ def create_charts():
     """Create enhanced charts section with improved visuals and consistent height"""
     return dbc.Row(
         [
-            # Sales Trend Chart
             dbc.Col(
                 [
                     dbc.Card(
@@ -351,7 +322,7 @@ def create_charts():
                                                     ]
                                                 },
                                                 style={
-                                                    'height': '380px',  # Adjusted for consistent height
+                                                    'height': '380px',
                                                     'borderRadius': '12px'
                                                 }
                                             )
@@ -381,7 +352,7 @@ def create_charts():
                                 ],
                                 style={
                                     'padding': '20px',
-                                    'height': '500px'  # Fixed height to match chatbot
+                                    'height': '500px'
                                 }
                             )
                         ],
@@ -397,7 +368,6 @@ def create_charts():
                 ],
                 width=6
             ),
-            # Category Sales Chart
             dbc.Col(
                 [
                     dbc.Card(
@@ -451,7 +421,7 @@ def create_charts():
                                                 ]
                                             },
                                             style={
-                                                'height': '380px',  # Adjusted for consistent height
+                                                'height': '380px',
                                                 'borderRadius': '12px'
                                             }
                                         )
@@ -461,7 +431,7 @@ def create_charts():
                                 ),
                                 style={
                                     'padding': '20px',
-                                    'height': '500px'  # Fixed height to match chatbot
+                                    'height': '500px'
                                 }
                             )
                         ],
@@ -486,7 +456,6 @@ def create_custom_chart_controls():
     """Create the custom chart controls section with enhanced UI/UX."""
     return dbc.Card(
         [
-            # Card Header
             dbc.CardHeader(
                 dbc.Row(
                     [
@@ -514,12 +483,10 @@ def create_custom_chart_controls():
                     'borderRadius': '16px 16px 0 0'
                 },
             ),
-            # Card Body
             dbc.CardBody(
                 [
                     dbc.Row(
                         [
-                            # X-Axis Dropdown
                             dbc.Col(
                                 [
                                     html.Label(
@@ -541,7 +508,6 @@ def create_custom_chart_controls():
                                 ],
                                 width=6,
                             ),
-                            # Y-Axis Dropdown
                             dbc.Col(
                                 [
                                     html.Label(
@@ -566,7 +532,6 @@ def create_custom_chart_controls():
                         ],
                         className="mb-4",
                     ),
-                    # Chart Type Dropdown
                     html.Label(
                         "Chart Type", className="form-label fw-bold text-muted"
                     ),
@@ -581,7 +546,6 @@ def create_custom_chart_controls():
                         placeholder="Select chart type",
                         className="chart-dropdown mb-4",
                     ),
-                    # Aggregation Dropdown
                     html.Label(
                         "Aggregation", className="form-label fw-bold text-muted"
                     ),
@@ -600,7 +564,7 @@ def create_custom_chart_controls():
                 ],
                 style={
                     'padding': '20px',
-                    'height': '500px',  # Match height with other components
+                    'height': '500px',
                 },
             ),
         ],
@@ -617,14 +581,11 @@ def create_custom_chart_controls():
 def create_action_bar():
     return dbc.Container(
         [
-            # Dashboard Title
             dbc.Row(
                 dbc.Col(html.H4("Dashboard", className="mb-4"), width=12)
             ),
-            # Action Bar Row
             dbc.Row(
                 [
-                    # Left Section: Upload Data and Generate Report
                     dbc.Col(
                         dbc.Row(
                             [
@@ -657,32 +618,31 @@ def create_action_bar():
                                     width=6
                                 )
                             ],
-                            className="g-2"  # Add spacing between buttons
+                            className="g-2"
                         ),
-                        width=8  # Allocate 8 columns to the left section
+                        width=8
                     ),
-                    # Right Section: Dark Mode Toggle
                     dbc.Col(
                         html.Div(
                             [
                                 dbc.Switch(
                                     id="dark-mode-toggle",
                                     label="Dark Mode",
-                                    value=False,  # Default: light mode
-                                    disabled=True,  # Disable the switch
+                                    value=False,
+                                    disabled=True,
                                     style={
-                                        'marginRight': '10px'  # Add space between label and switch
+                                        'marginRight': '10px'
                                     }
                                 )
                             ],
                             style={
                                 'display': 'flex',
-                                'alignItems': 'center',  # Ensures label and toggle are aligned vertically
-                                'justifyContent': 'flex-end'  # Align the toggle to the rightmost edge
+                                'alignItems': 'center',
+                                'justifyContent': 'flex-end'
                             }
                         ),
-                        width="auto",  # Let it take only the space it needs
-                        className="ms-auto"  # Push to the far right using ms-auto
+                        width="auto",
+                        className="ms-auto"
                     )
                 ],
                 align="center",
@@ -693,101 +653,6 @@ def create_action_bar():
     )
 
 
-# layout = html.Div(
-#     dbc.Container([
-#         create_header(),
-#         create_action_bar(),
-#         create_filters(),
-#         create_metrics(),
-#         dbc.Row(
-#             [
-#                 dbc.Col(
-#                     create_chatbot(),
-#                     width=4,
-#                     className="h-100"
-#                 ),
-#                 dbc.Col(
-#                     create_charts(),
-#                     width=8,
-#                     className="h-100"
-#                 )
-#             ],
-#             className="mb-4 align-items-stretch"
-#         ),
-#         dbc.Row([
-#             dbc.Col(create_custom_chart_controls(),
-#                     width=4, className="h-100"),
-#             dbc.Col(
-#                 dbc.Card([
-#                     dbc.CardHeader(
-#                         dbc.Row([
-#                             dbc.Col(
-#                                 html.H5("Custom Visualization", className="mb-0")),
-#                             dbc.Col(
-#                                 html.Div([
-#                                     dbc.Button(
-#                                         html.I(
-#                                             className="fas fa-expand-arrows-alt"),
-#                                         color="link",
-#                                         size="sm",
-#                                         className="text-muted me-2",
-#                                         style={'boxShadow': 'none'}
-#                                     ),
-#                                     dbc.Button(
-#                                         html.I(className="fas fa-download"),
-#                                         color="link",
-#                                         size="sm",
-#                                         className="text-muted",
-#                                         style={'boxShadow': 'none'}
-#                                     )
-#                                 ]),
-#                                 width="auto",
-#                             )
-#                         ], align="center"),
-#                         style={
-#                             'backgroundColor': '#ffffff',
-#                             'borderBottom': '1px solid rgba(0,0,0,0.1)',
-#                             'padding': '20px',
-#                             'borderRadius': '16px 16px 0 0'
-#                         }
-#                     ),
-#                     dbc.CardBody([
-#                         dcc.Loading(
-#                             id="loading-graph",
-#                             children=[
-#                                 dcc.Graph(
-#                                     id='custom-graph',
-#                                     style={
-#                                         'height': '460px',  # Adjusted to match others
-#                                         'borderRadius': '12px'
-#                                     }
-#                                 )
-#                             ],
-#                             type="circle",
-#                             color="#0d6efd"  # Matched with other loaders
-#                         )
-#                     ], style={
-#                         'padding': '20px',
-#                         'height': '500px'  # Match height with other components
-#                     }),
-#                 ],
-#                     className="shadow-sm h-100",
-#                     style={
-#                     'borderRadius': '16px',
-#                     'border': 'none',
-#                     'backgroundColor': '#ffffff',
-#                     'transition': 'all 0.3s ease'
-#                 }),
-#                 width=8,
-#                 className="h-100"
-#             )
-#         ], className="align-items-stretch")
-#     ], fluid=True),
-#     id="main-container"
-# )
-
-
-# Main layout
 layout = dbc.Container([
     create_header(),
     create_action_bar(),
@@ -851,17 +716,17 @@ layout = dbc.Container([
                             dcc.Graph(
                                 id='custom-graph',
                                 style={
-                                    'height': '460px',  # Adjusted to match others
+                                    'height': '460px',
                                     'borderRadius': '12px'
                                 }
                             )
                         ],
                         type="circle",
-                        color="#0d6efd"  # Matched with other loaders
+                        color="#0d6efd"
                     )
                 ], style={
                     'padding': '20px',
-                    'height': '500px'  # Match height with other components
+                    'height': '500px'
                 }),
             ],
                 className="shadow-sm h-100",

@@ -1,49 +1,13 @@
 from dash import Input, Output, callback, no_update, html
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime
+from constants.generic_constants import CHART_TYPES, AGGREGATIONS, LIGHT_THEME, DARK_THEME, load_data
 
-# Load and preprocess data
-df = pd.read_csv("./data/raw/sample_data.csv", low_memory=False)
-df["created_at"] = pd.to_datetime(df["created_at"])
+df = load_data()
 
-# Column classifications
 NUMERIC_COLUMNS = df.select_dtypes(include=['number']).columns.tolist()
 CATEGORICAL_COLUMNS = df.select_dtypes(
     include=['object', 'category']).columns.tolist()
-
-# Chart type configurations
-CHART_TYPES = {
-    'line': {'function': px.line, 'name': 'Line Chart'},
-    'bar': {'function': px.bar, 'name': 'Bar Chart'},
-    'scatter': {'function': px.scatter, 'name': 'Scatter Plot'},
-}
-
-# Aggregation functions
-AGGREGATIONS = {
-    'sum': 'sum',
-    'mean': 'mean',
-    'count': 'count',
-    'min': 'min',
-    'max': 'max',
-}
-
-LIGHT_THEME = {
-    "background": "#f8f9fa",
-    "text": "#212529",
-    "card": "#ffffff",
-    "border": "1px solid rgba(0,0,0,0.1)",
-    "button": "#0d6efd",
-}
-
-DARK_THEME = {
-    "background": "#212529",
-    "text": "#f8f9fa",
-    "card": "#343a40",
-    "border": "1px solid rgba(255,255,255,0.1)",
-    "button": "#0d6efd",
-}
 
 
 def register_callbacks(app):
@@ -61,7 +25,7 @@ def register_callbacks(app):
             "backgroundColor": theme["background"],
             "color": theme["text"],
             "padding": "24px",
-            "height": "100vh",  # Adjust to fit the full screen
+            "height": "100vh",
         }
 
         card_style = {
@@ -94,14 +58,12 @@ def register_callbacks(app):
         ]
     )
     def update_dashboard(start_date, end_date, order_status):
-        # Filter data
         filtered_df = df[
             (df["created_at"] >= start_date) &
             (df["created_at"] <= end_date) &
             (df["order_status"].isin(order_status))
         ]
 
-        # Sales trend chart
         trend_data = filtered_df.groupby(
             pd.Grouper(key="created_at", freq='D'))["grand_total"].sum().reset_index()
         sales_trend_fig = go.Figure()
@@ -125,7 +87,6 @@ def register_callbacks(app):
                        zerolinecolor='rgba(0,0,0,0.1)'),
         )
 
-        # Category sales chart
         category_data = filtered_df.groupby("product_category")[
             "grand_total"].sum().sort_values(ascending=True).reset_index()
         category_sales_fig = go.Figure()
@@ -146,7 +107,6 @@ def register_callbacks(app):
                        zerolinecolor='rgba(0,0,0,0.1)'),
         )
 
-        # Calculate metrics
         total_sales = f"${filtered_df['grand_total'].sum():,.2f}"
         total_orders = f"{filtered_df['item_id'].nunique():,}"
         avg_order_value = f"${filtered_df['grand_total'].mean():,.2f}" if not filtered_df.empty else "$0.00"
@@ -175,7 +135,6 @@ def register_callbacks(app):
     )
     def update_graph(x_axis, y_axis, chart_type, aggregation):
         """Update the custom graph based on user selections"""
-        # Handle missing values
         if not x_axis or not y_axis:
             return go.Figure().update_layout(
                 title="Please select valid X and Y axes",
@@ -184,7 +143,6 @@ def register_callbacks(app):
             )
 
         try:
-            # Apply aggregation if specified
             if aggregation and aggregation in AGGREGATIONS:
                 agg_func = AGGREGATIONS[aggregation]
                 aggregated_df = df.groupby(x_axis).agg(
@@ -195,7 +153,6 @@ def register_callbacks(app):
                 x = df[x_axis]
                 y = df[y_axis]
 
-            # Generate figure using the appropriate chart type
             fig = CHART_TYPES[chart_type]['function'](
                 x=x,
                 y=y,
@@ -203,7 +160,6 @@ def register_callbacks(app):
                 title=f"{y_axis} vs {x_axis} ({aggregation})" if aggregation else f"{y_axis} vs {x_axis}"
             )
 
-            # Update layout for consistency
             fig.update_layout(
                 paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
