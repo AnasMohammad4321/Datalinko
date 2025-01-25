@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html
-import openai
+# import openai
 import pandas as pd
 from constants.generic_constants import COLORS
 
@@ -23,13 +23,15 @@ def generate_metric_card(id, label, icon):
 
 
 def generate_report(data_summary):
-    prompt = f"Generate a detailed business performance report using the following data summary: {data_summary}"
+    # prompt = f"Generate a detailed business performance report using the following data summary: {data_summary}"
 
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=prompt,
-        temperature=0.7,
-        max_tokens=500
-    )
+    # response = openai.Completion.create(
+    #     model="text-davinci-003",
+    #     prompt=prompt,
+    #     temperature=0.7,
+    #     max_tokens=500
+    # )
 
-    return response.choices[0].text.strip()
+    # return response.choices[0].text.strip()
+
+    pass
