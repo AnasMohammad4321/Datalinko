@@ -1,11 +1,29 @@
 import plotly.express as px
 import pandas as pd
 
+import os
+import pandas as pd
+
 def load_data():
-    PATH = "./sample_data.csv"
-    df = pd.read_csv(PATH, low_memory=False)
-    df["created_at"] = pd.to_datetime(df["created_at"])
+    # Get the absolute path of the current script's directory
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the path to sample_data.csv based on the script's directory
+    file_path = os.path.join(base_path, "sample_data.csv")
+    
+    print("File path: ", file_path)  # For debugging, check if the path is correct
+    
+    # Load the CSV file
+    df = pd.read_csv(file_path, low_memory=False)
+    
+    # Ensure the "created_at" column exists before processing
+    if 'created_at' in df.columns:
+        df["created_at"] = pd.to_datetime(df["created_at"])
+    else:
+        raise ValueError("'created_at' column not found in the data.")
+    
     return df
+
 
 
 COLORS = {
