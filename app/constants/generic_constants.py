@@ -4,7 +4,8 @@ import pandas as pd
 
 def load_data():
     df = pd.read_csv("./data/raw/sample_data.csv", low_memory=False)
-    df["created_at"] = pd.to_datetime(df["created_at"])
+    print("df.columns: ", df.columns)
+    # df["created_at"] = pd.to_datetime(df["created_at"])
     return df
 
 
