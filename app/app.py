@@ -1,8 +1,8 @@
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
-from layout import layout
-from callbacks import register_callbacks
+from app.layout import layout
+from app.callbacks import register_callbacks
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 

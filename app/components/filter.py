@@ -1,6 +1,6 @@
 from dash import dcc, html
 import dash_bootstrap_components as dbc
-from constants.generic_constants import load_data
+from app.constants.generic_constants import load_data
 
 df = load_data()
 

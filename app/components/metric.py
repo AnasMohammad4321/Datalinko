@@ -1,6 +1,5 @@
-from utils import generate_metric_card
 import dash_bootstrap_components as dbc
-
+from app.utils import generate_metric_card
 
 def create_metrics():
     """Create the metrics cards section with hover and click effects"""

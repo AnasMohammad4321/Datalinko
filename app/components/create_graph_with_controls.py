@@ -1,4 +1,4 @@
-from components.custom_chart_control import create_custom_chart_controls
+from app.components.custom_chart_control import create_custom_chart_controls
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 
