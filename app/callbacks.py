@@ -1,17 +1,15 @@
-from dash import Input, Output, callback, no_update, html
+from dash import Input, Output, callback, no_update, html, State, ALL, MATCH, ctx
 import pandas as pd
 import plotly.graph_objects as go
 from constants.generic_constants import CHART_TYPES, AGGREGATIONS, LIGHT_THEME, DARK_THEME, load_data
+from components.create_graph_with_controls import create_graph_with_controls
 
 df = load_data()
 
 NUMERIC_COLUMNS = df.select_dtypes(include=['number']).columns.tolist()
-CATEGORICAL_COLUMNS = df.select_dtypes(
-    include=['object', 'category']).columns.tolist()
-
+CATEGORICAL_COLUMNS = df.select_dtypes(include=['object', 'category']).columns.tolist()
 
 def register_callbacks(app):
-
     @app.callback(
         Output("main-container", "style"),
         Output("custom-graph", "style"),
@@ -20,27 +18,23 @@ def register_callbacks(app):
     )
     def toggle_dark_mode(dark_mode):
         theme = DARK_THEME if dark_mode else LIGHT_THEME
-
         container_style = {
             "backgroundColor": theme["background"],
             "color": theme["text"],
             "padding": "24px",
             "height": "100vh",
         }
-
         card_style = {
             "backgroundColor": theme["card"],
             "color": theme["text"],
             "border": theme["border"],
             "borderRadius": "16px",
         }
-
         graph_style = {
             "height": "460px",
             "borderRadius": "12px",
             "backgroundColor": theme["card"],
         }
-
         return container_style, graph_style, card_style
 
     @app.callback(
@@ -63,9 +57,10 @@ def register_callbacks(app):
             (df["created_at"] <= end_date) &
             (df["order_status"].isin(order_status))
         ]
-
         trend_data = filtered_df.groupby(
             pd.Grouper(key="created_at", freq='D'))["grand_total"].sum().reset_index()
+        
+        # Create sales trend figure
         sales_trend_fig = go.Figure()
         sales_trend_fig.add_trace(go.Scatter(
             x=trend_data["created_at"],
@@ -81,12 +76,11 @@ def register_callbacks(app):
             plot_bgcolor='rgba(0,0,0,0)',
             hovermode='x unified',
             margin=dict(l=0, r=0, t=40, b=0),
-            yaxis=dict(gridcolor='rgba(0,0,0,0.1)',
-                       zerolinecolor='rgba(0,0,0,0.1)'),
-            xaxis=dict(gridcolor='rgba(0,0,0,0.1)',
-                       zerolinecolor='rgba(0,0,0,0.1)'),
+            yaxis=dict(gridcolor='rgba(0,0,0,0.1)', zerolinecolor='rgba(0,0,0,0.1)'),
+            xaxis=dict(gridcolor='rgba(0,0,0,0.1)', zerolinecolor='rgba(0,0,0,0.1)'),
         )
 
+        # Create category sales figure
         category_data = filtered_df.groupby("product_category")[
             "grand_total"].sum().sort_values(ascending=True).reset_index()
         category_sales_fig = go.Figure()
@@ -101,12 +95,11 @@ def register_callbacks(app):
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             margin=dict(l=0, r=0, t=40, b=0),
-            yaxis=dict(gridcolor='rgba(0,0,0,0.1)',
-                       zerolinecolor='rgba(0,0,0,0.1)'),
-            xaxis=dict(gridcolor='rgba(0,0,0,0.1)',
-                       zerolinecolor='rgba(0,0,0,0.1)'),
+            yaxis=dict(gridcolor='rgba(0,0,0,0.1)', zerolinecolor='rgba(0,0,0,0.1)'),
+            xaxis=dict(gridcolor='rgba(0,0,0,0.1)', zerolinecolor='rgba(0,0,0,0.1)'),
         )
 
+        # Calculate metrics
         total_sales = f"${filtered_df['grand_total'].sum():,.2f}"
         total_orders = f"{filtered_df['item_id'].nunique():,}"
         avg_order_value = f"${filtered_df['grand_total'].mean():,.2f}" if not filtered_df.empty else "$0.00"
@@ -114,27 +107,54 @@ def register_callbacks(app):
         return sales_trend_fig, category_sales_fig, total_sales, total_orders, avg_order_value
 
     @app.callback(
-        Output('y-axis-dropdown', 'options'),
-        Input('x-axis-dropdown', 'value')
+        Output('graphs-container', 'children'),
+        [Input('add-graph-button', 'n_clicks'),
+         Input({'type': 'delete-button', 'index': ALL}, 'n_clicks')],
+        State('graphs-container', 'children'),
+        prevent_initial_call=True
+    )
+    def manage_graphs(add_clicks, delete_clicks, existing_children):
+        triggered = ctx.triggered_id
+        
+        if existing_children is None:
+            existing_children = []
+            
+        # Handle Add Graph button
+        if triggered == 'add-graph-button':
+            if add_clicks:
+                new_id = f"graph-{len(existing_children) + 1}"
+                existing_children.append(create_graph_with_controls(id_suffix=new_id))
+            
+        # Handle Delete button
+        elif isinstance(triggered, dict) and triggered.get('type') == 'delete-button':
+            deleted_index = triggered.get('index')
+            existing_children = [
+                child for child in existing_children 
+                if child['props']['id']['index'] != deleted_index
+            ]
+            
+        return existing_children
+
+    @app.callback(
+        Output({'type': 'y-axis-dropdown', 'index': MATCH}, 'options'),
+        Input({'type': 'x-axis-dropdown', 'index': MATCH}, 'value')
     )
     def update_yaxis_options(selected_x):
-        """Update Y-axis options based on the selected X-axis"""
         if selected_x in NUMERIC_COLUMNS:
             return [{'label': col, 'value': col} for col in NUMERIC_COLUMNS]
         return [{'label': col, 'value': col}
                 for col in NUMERIC_COLUMNS if col != selected_x]
 
     @app.callback(
-        Output('custom-graph', 'figure'),
+        Output({'type': 'custom-graph', 'index': MATCH}, 'figure'),
         [
-            Input('x-axis-dropdown', 'value'),
-            Input('y-axis-dropdown', 'value'),
-            Input('chart-type-dropdown', 'value'),
-            Input('aggregation-dropdown', 'value'),
+            Input({'type': 'x-axis-dropdown', 'index': MATCH}, 'value'),
+            Input({'type': 'y-axis-dropdown', 'index': MATCH}, 'value'),
+            Input({'type': 'chart-type-dropdown', 'index': MATCH}, 'value'),
+            Input({'type': 'aggregation-dropdown', 'index': MATCH}, 'value'),
         ]
     )
     def update_graph(x_axis, y_axis, chart_type, aggregation):
-        """Update the custom graph based on user selections"""
         if not x_axis or not y_axis:
             return go.Figure().update_layout(
                 title="Please select valid X and Y axes",
@@ -164,10 +184,8 @@ def register_callbacks(app):
                 paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
                 margin=dict(l=0, r=0, t=40, b=0),
-                yaxis=dict(gridcolor='rgba(0,0,0,0.1)',
-                           zerolinecolor='rgba(0,0,0,0.1)'),
-                xaxis=dict(gridcolor='rgba(0,0,0,0.1)',
-                           zerolinecolor='rgba(0,0,0,0.1)'),
+                yaxis=dict(gridcolor='rgba(0,0,0,0.1)', zerolinecolor='rgba(0,0,0,0.1)'),
+                xaxis=dict(gridcolor='rgba(0,0,0,0.1)', zerolinecolor='rgba(0,0,0,0.1)'),
             )
 
             return fig
@@ -181,13 +199,10 @@ def register_callbacks(app):
 
     @app.callback(
         Output("chat-display", "children"),
-        [
-            Input("send-button", "n_clicks"),
-            Input("user-input", "value")
-        ]
+        [Input("send-button", "n_clicks"),
+         Input("user-input", "value")]
     )
     def update_chat(n_clicks, user_input):
-        """Update chat display with user messages"""
         if not n_clicks or not user_input:
             return no_update
 
