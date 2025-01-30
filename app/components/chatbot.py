@@ -2,7 +2,6 @@ from dash import dcc, html
 import dash_bootstrap_components as dbc
 
 def create_chatbot():
-    """Create an enhanced chatbot section with improved UI/UX and an under-construction overlay"""
     return dbc.Card(
         [
             html.Div(
@@ -24,8 +23,8 @@ def create_chatbot():
                     'width': '100%',
                     'height': '100%',
                     'backgroundColor': 'rgba(0, 0, 0, 0.10)',
-                    'backdropFilter': 'blur(1px)',
-                    'zIndex': 1,
+                    # 'backdropFilter': 'blur(1px)',
+                    # 'zIndex': 1,
                     'display': 'flex',
                     'alignItems': 'center',
                     'justifyContent': 'center',

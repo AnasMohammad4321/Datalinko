@@ -5,11 +5,9 @@ from constants.generic_constants import load_data
 df = load_data()
 
 NUMERIC_COLUMNS = df.select_dtypes(include=['number']).columns.tolist()
-CATEGORICAL_COLUMNS = df.select_dtypes(
-    include=['object', 'category']).columns.tolist()
+CATEGORICAL_COLUMNS = df.select_dtypes(include=['object', 'category']).columns.tolist()
 
-
-def create_custom_chart_controls():
+def create_custom_chart_controls(id_suffix=""):
     """Create the custom chart controls section with enhanced UI/UX."""
     return dbc.Card(
         [
@@ -25,7 +23,7 @@ def create_custom_chart_controls():
                                 color="link",
                                 size="sm",
                                 className="text-muted",
-                                id="reset-controls",
+                                id={'type': 'reset-controls', 'index': id_suffix},
                                 style={'boxShadow': 'none'}
                             ),
                             width="auto",
@@ -51,7 +49,7 @@ def create_custom_chart_controls():
                                         className="form-label fw-bold text-muted",
                                     ),
                                     dcc.Dropdown(
-                                        id='x-axis-dropdown',
+                                        id={'type': 'x-axis-dropdown', 'index': id_suffix},
                                         options=[
                                             {'label': col, 'value': col}
                                             for col in df.columns
@@ -72,7 +70,7 @@ def create_custom_chart_controls():
                                         className="form-label fw-bold text-muted",
                                     ),
                                     dcc.Dropdown(
-                                        id='y-axis-dropdown',
+                                        id={'type': 'y-axis-dropdown', 'index': id_suffix},
                                         options=[
                                             {'label': col, 'value': col}
                                             for col in NUMERIC_COLUMNS
@@ -93,7 +91,7 @@ def create_custom_chart_controls():
                         "Chart Type", className="form-label fw-bold text-muted"
                     ),
                     dcc.Dropdown(
-                        id='chart-type-dropdown',
+                        id={'type': 'chart-type-dropdown', 'index': id_suffix},
                         options=[
                             {'label': 'Line Chart', 'value': 'line'},
                             {'label': 'Bar Chart', 'value': 'bar'},
@@ -107,7 +105,7 @@ def create_custom_chart_controls():
                         "Aggregation", className="form-label fw-bold text-muted"
                     ),
                     dcc.Dropdown(
-                        id='aggregation-dropdown',
+                        id={'type': 'aggregation-dropdown', 'index': id_suffix},
                         options=[
                             {'label': 'Sum', 'value': 'sum'},
                             {'label': 'Mean', 'value': 'mean'},
