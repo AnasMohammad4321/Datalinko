@@ -1,9 +1,11 @@
 import plotly.express as px
 import pandas as pd
-
+import sys
 
 def load_data():
-    df = pd.read_csv("./data/raw/sample_data.csv", low_memory=False)
+    print("sys.path: ", sys.path[0]+"/data/raw/sample_data.csv")    
+    PATH = sys.path[0]+"/data/raw/sample_data.csv"
+    df = pd.read_csv(PATH, low_memory=False)
     df["created_at"] = pd.to_datetime(df["created_at"])
     return df
 
