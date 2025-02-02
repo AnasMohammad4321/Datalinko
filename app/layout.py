@@ -2,15 +2,15 @@ from dash.dependencies import Input, Output, State
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from datetime import datetime
-from app.constants.generic_constants import COLORS, load_data
-from app.components.header import create_header
-from app.components.action_bar import create_action_bar
-from app.components.filter import create_filters
-from app.components.metric import create_metrics
-from app.components.chatbot import create_chatbot
-from app.components.chart import create_charts
-from app.components.create_graph_with_controls import create_graph_with_controls
-from app.components.footer import create_footer
+from constants.generic_constants import COLORS, load_data
+from components.header import create_header
+from components.action_bar import create_action_bar
+from components.filter import create_filters
+from components.metric import create_metrics
+from components.chatbot import create_chatbot
+from components.chart import create_charts
+from components.create_graph_with_controls import create_graph_with_controls
+from components.footer import create_footer
 df = load_data()
 
 NUMERIC_COLUMNS = df.select_dtypes(include=['number']).columns.tolist()

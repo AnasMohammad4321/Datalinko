@@ -6,11 +6,9 @@ import logging
 app_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'app'))
 sys.path.append(app_path)
 
-
 from app.app import app
 
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
