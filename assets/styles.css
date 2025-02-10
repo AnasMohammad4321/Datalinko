@@ -37,3 +37,51 @@
     color: #3a3a3a; /* Primary color, adjust to fit your theme */
     padding-top: 5px; /* Add spacing between the label and value */
 }
+
+.send-button-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25) !important;
+    background-color: #0b5ed7 !important;
+}
+
+.send-button-hover:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(13, 110, 253, 0.15) !important;
+}
+
+.typing-dot {
+    animation: typingAnimation 1.4s infinite;
+    animation-fill-mode: both;
+    background-color: #0d6efd;
+    border-radius: 50%;
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingAnimation {
+    0% { transform: translateY(0px); }
+    28% { transform: translateY(-6px); }
+    44% { transform: translateY(0px); }
+}
+
+#chat-display::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat-display::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#chat-display::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+#chat-display::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
