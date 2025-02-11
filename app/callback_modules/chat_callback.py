@@ -31,7 +31,8 @@ def register_chat_callback(app):
         user_message = create_message_bubble(user_input, is_bot=False)
         updated_messages = current_messages + [user_message]
 
-        typing_style = show_typing_indicator()
+        # typing_style = show_typing_indicator()
+        typing_style = ""
 
         bot_response = asyncio.run(get_bot_response(user_input)) 
 
