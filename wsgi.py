@@ -37,4 +37,6 @@ if __name__ == "__main__":
     port = get_available_port()
     logger.info(f"Starting server on port {port}")
     logger.info("Debug mode is enabled")
-    app.run_server(debug=True, port=port)
+    # app.run_server(debug=True, port=port)
+    app.run(host="0.0.0.0", port=8060, debug=True)
+

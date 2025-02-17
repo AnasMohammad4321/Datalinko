@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  datalinko:
+    build: .
+    ports:
+      - "8060:8060"
+    volumes:
+      - .:/app
+      - ./data:/app/data  
+    environment:
+      - FLASK_ENV=development
+    env_file:
+      - .env 
+    command: python wsgi.py
