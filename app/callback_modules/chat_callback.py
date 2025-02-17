@@ -2,7 +2,7 @@ from dash import Input, Output, callback, no_update, html, State, callback_conte
 import httpx
 import logging
 import asyncio
-from app.components.chatbot import create_message_bubble, create_typing_indicator
+from components.chatbot import create_message_bubble, create_typing_indicator
 from typing import List, Dict, Any
 
 logging.basicConfig(level=logging.ERROR, filename="errors.log")
@@ -55,7 +55,10 @@ async def get_bot_response(user_input: str) -> Any:
 
 async def fetch_chat_response(user_query: str) -> Dict[str, Any]:
     """ Make an asynchronous HTTP request to fetch chat response """
-    url = "http://127.0.0.1:8000/chat"
+    # url = "http://127.0.0.1:8000/chat"
+    # url = "http://0.0.0.0:8000/chat"
+    url = "http://ecommerce-chatbot-web-1:8000/chat"    
+
     payload = {"query": user_query}
 
     try:

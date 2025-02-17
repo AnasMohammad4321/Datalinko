@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 try:
-    df = pd.read_csv("./data/raw/data.csv", low_memory=False)
+    df = pd.read_csv("../../data/raw/data.csv", low_memory=False)
     df["created_at"] = pd.to_datetime(df["created_at"]) 
 except Exception as e:
     raise RuntimeError(f"Error loading data: {str(e)}")

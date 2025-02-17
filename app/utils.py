@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import html
 # import openai
 import pandas as pd
-from app.constants.generic_constants import COLORS
+from constants.generic_constants import COLORS
 
 
 def generate_metric_card(id, label, icon):
